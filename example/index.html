@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>PayPal Mobile Checkout Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="cordova.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        document.addEventListener('deviceready', function () {
+            if (window.PayPalMobile) {
+                // Create a sandbox account at https://developer.paypal.com/
+                PayPalMobile.setEnvironment('PayPalEnvironmentSandbox');
+
+                // This is just a simple object
+                var payment = new PayPalMobile.Payment('1.99', 'USD', 'Yumy Sweets');
+
+                var paymentSuccess = function (paymentProof) {
+                    navigator.notification.alert(paymentProof);
+                };
+
+                var paymentFailure = function (error) {
+                    navigator.notification.alert(error);
+                };
+
+                PayPalMobile.presentPaymentUI(
+                    'CLIENT_ID', // Client ID
+                    'YOUR_EMAIL', // Your PayPal email to receive payments
+                    'unique.user.identifier', // This can be anything
+                    payment, // This could be a simple object too
+                    paymentSuccess,
+                    paymentFailure
+                );
+            } else {
+                alert('Something went wrong : (');
+            }
+        });
+    </script>
+</body>
+</html>

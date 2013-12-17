@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="pl.spinin.phonegap.plugins.paypalmobile"
+        version="0.5">
+
+    <name>PayPal Mobile</name>
+    <description>PayPal Mobile checkout plugin</description>
+    <license>MIT</license>
+    <keywords>paypal,payments</keywords>
+
+    <!-- Supports Cordova 3.0.0 and up -->
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+    <!--
+        This is a new way of including the .js assets in your project.
+        The following www/PayPalMobile.js is exported to window.PayPalMobile variable
+        and will be available for you without additional setup.
+    -->
+    <js-module src="www/PayPalMobile.js" name="PayPalMobile">
+        <clobbers target="window.PayPalMobile" />
+    </js-module>
+
+    <!-- Android -->
+    <platform name="android">
+
+        <!-- config.xml - This makes the plugin available for you automatically -->
+        <config-file target="res/xml/config.xml" parent="/*">
+            <!-- The feature name is associated with the cordova.exec() service param in the JS file -->
+            <feature name="PayPalMobile">
+                <param name="android-package"
+                       value="com.paypal.android.sdk.phonegap.PayPalMobilePGPlugin" />
+            </feature>
+        </config-file>
+
+        <!-- AndroidManifest.xml - Add required permissions -->
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <!-- for card.io card scanning -->
+            <uses-permission android:name="android.permission.CAMERA" />
+            <uses-permission android:name="android.permission.VIBRATE" />
+            <!-- for most things, including card.io and paypal -->
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.INTERNET" />
+            <!-- Camera features -->
+            <uses-feature android:name="android.hardware.camera"
+                          android:required="false" />
+            <uses-feature android:name="android.hardware.camera.autofocus"
+                          android:required="false" />
+            <uses-feature android:name="android.hardware.camera.flash"
+                          android:required="false" />
+        </config-file>
+
+        <!-- AndroidManifest.xml - Register services and activities -->
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <service android:name="com.paypal.android.sdk.payments.PayPalService"
+                     android:exported="false"/>
+
+            <activity android:name="com.paypal.android.sdk.payments.PaymentActivity" />
+            <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
+            <activity android:name="com.paypal.android.sdk.payments.PaymentMethodActivity" />
+            <activity android:name="com.paypal.android.sdk.payments.PaymentConfirmActivity" />
+
+            <activity android:name="io.card.payment.CardIOActivity"
+                      android:configChanges="keyboardHidden|orientation" />
+            <activity android:name="io.card.payment.DataEntryActivity" />
+        </config-file>
+
+        <!--
+            You need to export files from plugin folders to correct Cordova project paths.
+            If you are developing on Icenium platform you will not have direct access to these paths,
+            but you have to remember it still is a Cordova/PhoneGap project.
+        -->
+        <source-file src="src/android/com/paypal/android/sdk/phonegap/PayPalMobilePGPlugin.java"
+                     target-dir="src/com/paypal/android/sdk/phonegap"/>
+        <!--
+            You may want to get the latest version from PayPal.
+            https://github.com/paypal/PayPal-Android-SDK
+        -->
+        <source-file src="libs/android/PayPalAndroidSDK.jar"
+                     target-dir="libs"/>
+    </platform>
+
+</plugin>
