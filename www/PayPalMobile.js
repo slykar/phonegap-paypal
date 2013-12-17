@@ -26,9 +26,9 @@ var PayPalMobile = {
 
     /**
      * Set PayPal environment type
-     * @param {[type]} environment [description]
-     * @param {[type]} success     [description]
-     * @param {[type]} fail        [description]
+     * @param {string}   environment
+     * @param {Function} success
+     * @param {Function} fail
      */
     setEnvironment: function(environment, success, fail) {
         cordova.exec(success, fail, "PayPalMobile", "setEnvironment", [environment]);
